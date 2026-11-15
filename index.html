@@ -233,6 +233,14 @@
             canvas.setActiveObject(userFabricImg); 
             canvas.renderAll();
 
+            // Меняем текст на главной кнопке загрузки
+            document.getElementById('uploadLabel').innerHTML = '<input type="file" id="imageLoader" accept="image/*" /> 📁 Поставить другое фото';
+
+            // Перепривязываем событие к новой кнопке (так как мы пересоздали input)
+            document.getElementById('imageLoader').addEventListener('change', handleImageUpload);
+
+            previewContainer.style.display = 'block';
+
             previewContainer.style.display = 'block';
           };
         };
@@ -275,23 +283,6 @@
       link.href = dataURL;
       link.click();
   });
-
-    // --- Кнопка "Поставить другое фото" ---
-    resetBtn.addEventListener('click', () => {
-      // 1. Очищаем холст от старых фото и обложек
-      if (canvas) {
-        canvas.clear();
-        canvas.dispose(); // Полностью удаляем старый холст из памяти
-        canvas = null;    // Обнуляем переменную
-      }
-  
-      // 2. Прячем превью и очищаем поле выбора файла
-      previewContainer.style.display = 'none';
-      imageLoader.value = ''; // Это позволяет выбрать тот же самый файл повторно
-  
-      // 3. Программно нажимаем на скрытый input, чтобы сразу открылось окно выбора
-      imageLoader.click();
-    });
     
   </script>
 </body>
