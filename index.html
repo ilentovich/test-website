@@ -164,29 +164,29 @@
 
             canvas.add(userFabricImg);
             // --- ОГРАНИЧИВАЕМ ДВИЖЕНИЕ ФОТО ВНУТРИ КРУГА ---
-            // --- ЖЁСТКИЕ СТЕНЫ ДЛЯ ФОТО ---
+            // --- УМНЫЕ СТЕНЫ (НЕ ДАЮТ ОГОЛИТЬ КРАЯ) ---
             canvas.on('object:moving', function(e) {
               var obj = e.target;
-              
-              // Получаем текущие координаты центра фото с учётом масштаба
               var center = obj.getCenterPoint();
               
-              // Высчитываем, насколько центр фото может отклониться от центра круга
-              // (радиус круга минус половина ширины/высоты фото в пикселях)
-              // Используем 0.95, чтобы фото заходило за край на пару пикселей и не было пустоты
-              var maxOffsetX = (HEAD_SIZE / 2) - ((obj.getScaledWidth() * 0.95) / 2);
-              var maxOffsetY = (HEAD_SIZE / 2) - ((obj.getScaledHeight() * 0.95) / 2);
+              // Считаем, насколько фото больше круга
+              var halfPhotoWidth = obj.getScaledWidth() / 2;
+              var halfPhotoHeight = obj.getScaledHeight() / 2;
+              var radius = HEAD_SIZE / 2;
+            
+              // Если фото ШИРЕ круга, мы разрешаем двигать его влево-вправо, 
+              // но не даем краям отойти от центра круга дальше, чем на разницу в размерах.
+              // Если фото УЖЕ круга, мы вообще не даем ему двигаться по этой оси (оно должно быть по центру).
               
-              // Если фото стало слишком большим (зум), разрешаем двигать свободно (оно и так перекроет круг)
-              if (maxOffsetX < 0) maxOffsetX = 0;
-              if (maxOffsetY < 0) maxOffsetY = 0;
+              var maxOffsetX = Math.max(0, halfPhotoWidth - radius);
+              var maxOffsetY = Math.max(0, halfPhotoHeight - radius);
             
               var limitLeft = HEAD_X - maxOffsetX;
               var limitRight = HEAD_X + maxOffsetX;
               var limitTop = HEAD_Y - maxOffsetY;
               var limitBottom = HEAD_Y + maxOffsetY;
             
-              // Жёстко фиксируем координаты, если фото пытается вылезти
+              // Жестко стопарим, если вылезли за пределы
               if (center.x < limitLeft) obj.left += (limitLeft - center.x);
               if (center.x > limitRight) obj.left -= (center.x - limitRight);
               if (center.y < limitTop) obj.top += (limitTop - center.y);
