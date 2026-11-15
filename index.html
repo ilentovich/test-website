@@ -155,7 +155,9 @@
           transparentCover.src = offCanvas.toDataURL();
 
           transparentCover.onload = () => {
-            canvas = new fabric.Canvas(canvasElement, {
+              if (canvas) { canvas.dispose(); } // Если старый холст был, удаляем его
+  
+              canvas = new fabric.Canvas(canvasElement, {
               width: CANVAS_SIZE,
               height: CANVAS_SIZE,
               selection: false
