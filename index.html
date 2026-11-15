@@ -241,13 +241,36 @@
       };
     });
 
+    // --- Кнопка скачивания ---
     downloadBtn.addEventListener('click', () => {
       if (!canvas) return;
       canvas.discardActiveObject();
       canvas.renderAll();
+  
+      // 1. Спрашиваем у пользователя название
+      let userName = prompt("Введи своё имя или ник (мы добавим к нему -2l17):", "");
+  
+      // Если пользователь нажал "Отмена" или ввел пустоту, ставим название по умолчанию
+      if (!userName || userName.trim() === "") {
+        userName = "mixtape";
+      }
+  
+      // 2. Очищаем текст от запрещенных символов (чтобы файл не сломался)
+      // Убираем пробелы и спецсимволы, оставляем только буквы и цифры
+      userName = userName.trim().replace(/[^a-zA-Zа-яА-Я0-9]/g, '');
+  
+      // Если после очистки ничего не осталось (одни маты или знаки), ставим дефолт
+      if (userName === "") {
+        userName = "mixtape";
+      }
+
+      // 3. Формируем уникальное имя
+      const finalFileName = `${userName}-2l17.png`;
+
+      // 4. Скачиваем
       const dataURL = canvas.toDataURL({ format: 'png', quality: 1 });
       const link = document.createElement('a');
-      link.download = 'my-mixtape-cover.png';
+      link.download = finalFileName; // Подставляем наше уникальное имя
       link.href = dataURL;
       link.click();
     });
