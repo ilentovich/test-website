@@ -15,7 +15,6 @@
     }
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #7b2cbf;
       color: white;
       display: flex;
       flex-direction: column;
@@ -25,6 +24,14 @@
       margin: 0;
       padding: 20px;
       box-sizing: border-box;
+  
+      /* Настройки фона с картинкой */
+      background-color: #7b2cbf; /* Фиолетовый цвет остается как запасной */
+      background-image: linear-gradient(rgba(123, 44, 191, 0.75), rgba(123, 44, 191, 0.75)), url('bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
     }
     .container {
       background: rgba(255, 255, 255, 0.1);
