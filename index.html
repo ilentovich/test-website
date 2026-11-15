@@ -56,8 +56,8 @@
     
     /* Стили для холста, чтобы он не перехватывал скролл страницы, когда мы не на фото */
     canvas {
-      max-width: 100%;
-      height: auto;
+      max-width: 100% !important;
+      height: auto !important;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       touch-action: pan-y pinch-zoom; 
@@ -152,7 +152,8 @@
               hasBorders: true,
               hasControls: true,
               lockScalingFlip: true,
-              lockRotation: true
+              lockRotation: true,
+              evented: false
             });
 
             const scale = Math.max(HEAD_SIZE / userImg.width, HEAD_SIZE / userImg.height) * 1.2;
