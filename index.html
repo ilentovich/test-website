@@ -248,20 +248,23 @@
       canvas.renderAll();
   
       // 1. Спрашиваем у пользователя название
-      let userName = prompt("введи название файла:", "");
+      let userName = prompt("Введи своё имя или ник (мы добавим к нему -2l17):", "");
   
       // Если пользователь нажал "Отмена" или ввел пустоту, ставим название по умолчанию
       if (!userName || userName.trim() === "") {
         userName = "mixtape";
-      }
-  
-      // 2. Очищаем текст от запрещенных символов (чтобы файл не сломался)
-      // Убираем пробелы и спецсимволы, оставляем только буквы и цифры
-      userName = userName.trim().replace(/[^a-zA-Zа-яА-Я0-9]/g, '');
-  
-      // Если после очистки ничего не осталось (одни маты или знаки), ставим дефолт
-      if (userName === "") {
-        userName = "mixtape";
+      } else {
+        // 2. Очищаем текст
+        // Убираем пробелы по краям
+        userName = userName.trim();
+    
+        // Заменяем внутренние пробелы на нижнее подчеркивание
+        userName = userName.replace(/\s+/g, '_');
+    
+        // Оставляем ТОЛЬКО буквы (включая ё и Ё), цифры, дефисы и подчеркивания
+        // Все остальные символы заменяем на звёздочку *
+        // \p{L} означает "любая буква любого алфавита" (включая ё)
+        userName = userName.replace(/[^\p{L}0-9\-_]/gu, '*');
       }
 
       // 3. Формируем уникальное имя
@@ -270,27 +273,10 @@
       // 4. Скачиваем
       const dataURL = canvas.toDataURL({ format: 'png', quality: 1 });
       const link = document.createElement('a');
-      link.download = finalFileName; // Подставляем наше уникальное имя
+      link.download = finalFileName;
       link.href = dataURL;
       link.click();
-    });
-
-    // --- Кнопка "Поставить другое фото" ---
-    resetBtn.addEventListener('click', () => {
-      // 1. Очищаем холст от старых фото и обложек
-      if (canvas) {
-        canvas.clear();
-        canvas.dispose(); // Полностью удаляем старый холст из памяти
-        canvas = null;    // Обнуляем переменную
-      }
-  
-      // 2. Прячем превью и очищаем поле выбора файла
-      previewContainer.style.display = 'none';
-      imageLoader.value = ''; // Это позволяет выбрать тот же самый файл повторно
-  
-      // 3. Программно нажимаем на скрытый input, чтобы сразу открылось окно выбора
-      imageLoader.click();
-    });
+  });
     
   </script>
 </body>
