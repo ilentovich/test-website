@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Создай свою обложку микстейпа</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
   <style>
@@ -136,6 +136,7 @@
               height: CANVAS_SIZE,
               selection: false,
               allowTouchScrolling: true, 
+              stopContextMenu: true,
               enableRetinaScaling: true 
             });
 
@@ -181,39 +182,38 @@
             canvas.renderAll();
 
             // --- ШАГ 5: ДОБАВЛЯЕМ МОБИЛЬНЫЙ ЗУМ И СКРОЛЛ ---
-            // Зум колесиком мыши (для ПК)
+            // --- УМНОЕ ПЕРЕТАСКИВАНИЕ ХОЛСТА (ЗУМ) ---
             canvas.on('mouse:wheel', function(opt) {
               var delta = opt.e.deltaY;
               var zoom = canvas.getZoom();
               zoom *= 0.999 ** delta;
-              if (zoom > 20) zoom = 20;
-              if (zoom < 0.5) zoom = 0.5; 
-              canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-              opt.e.preventDefault();
-              opt.e.stopPropagation();
-            });
-
-            // Зум "щипком" (для телефонов)
-            canvas.on('touch:gesture', function(opt) {
-              var zoom = canvas.getZoom();
-              zoom *= opt.e.scale;
-              if (zoom > 20) zoom = 20;
+              if (zoom > 5) zoom = 5;
               if (zoom < 0.5) zoom = 0.5;
               canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
               opt.e.preventDefault();
               opt.e.stopPropagation();
             });
-
-            // Перетаскивание всего холста, когда он увеличен
+            
+            canvas.on('touch:gesture', function(opt) {
+              var zoom = canvas.getZoom();
+              zoom *= opt.e.scale;
+              if (zoom > 5) zoom = 5;
+              if (zoom < 0.5) zoom = 0.5;
+              canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+              opt.e.preventDefault();
+              opt.e.stopPropagation();
+            });
+            
             canvas.on('mouse:down', function(opt) {
-              if (canvas.getZoom() > 1 || (opt.e.touches && opt.e.touches.length === 2)) {
+              // Разрешаем таскать холст, только если кликнули мимо фото и если холст увеличен
+              if (!opt.target && canvas.getZoom() > 1) {
                 this.isDragging = true;
                 this.selection = false;
                 this.lastPosX = opt.e.clientX || (opt.e.touches && opt.e.touches[0].clientX);
                 this.lastPosY = opt.e.clientY || (opt.e.touches && opt.e.touches[0].clientY);
               }
             });
-
+            
             canvas.on('mouse:move', function(opt) {
               if (this.isDragging) {
                 var e = opt.e;
@@ -227,13 +227,13 @@
                 this.lastPosY = clientY;
               }
             });
-
+            
             canvas.on('mouse:up', function(opt) {
               this.setViewportTransform(this.viewportTransform);
               this.isDragging = false;
               this.selection = true;
             });
-
+            // ------------------------------------------
             // Показываем результат
             previewContainer.style.display = 'block';
           };
