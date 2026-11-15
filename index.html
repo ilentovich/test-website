@@ -233,8 +233,12 @@
             canvas.setActiveObject(userFabricImg); 
             canvas.renderAll();
 
-            // Меняем текст на главной кнопке загрузки
-            document.getElementById('uploadLabel').innerHTML = '<input type="file" id="imageLoader" accept="image/*" /> 📁 Поставить другое фото';
+            // Меняем текст на главной кнопке загрузки (с проверкой на существование)
+            const uploadLabel = document.getElementById('uploadLabel');
+            if (uploadLabel) {
+              uploadLabel.innerHTML = '<input type="file" id="imageLoader" accept="image/*" /> 📁 Поставить другое фото';
+              document.getElementById('imageLoader').addEventListener('change', handleImageUpload);
+            }
 
             // Перепривязываем событие к новой кнопке (так как мы пересоздали input)
             document.getElementById('imageLoader').addEventListener('change', handleImageUpload);
