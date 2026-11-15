@@ -6,6 +6,13 @@
   <title>Создай свою обложку микстейпа</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
   <style>
+    /* Подключаем наш файл шрифта */
+    @font-face {
+      font-family: 'MyPixelFont'; /* Придумываем название, по нему будем вызывать */
+      src: url('font.woff2') format('woff2'); /* Укажи имя файла, которое загрузил (например, font.ttf) */
+      font-weight: normal;
+      font-style: normal;
+    }
     body {
       font-family: 'Arial', sans-serif;
       background-color: #7b2cbf;
