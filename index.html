@@ -163,6 +163,31 @@
             });
 
             canvas.add(userFabricImg);
+            // --- ОГРАНИЧИВАЕМ ДВИЖЕНИЕ ФОТО ВНУТРИ КРУГА ---
+            canvas.on('object:moving', function(e) {
+              var obj = e.target;
+              // Считаем, насколько фото вылезло за край
+              var boundingRect = obj.getBoundingRect(true);
+              var circleCenterX = HEAD_X;
+              var circleCenterY = HEAD_Y;
+              var circleRadius = HEAD_SIZE / 2;
+            
+              // Ограничиваем по горизонтали (X)
+              if (boundingRect.left > (circleCenterX - circleRadius)) {
+                obj.left -= (boundingRect.left - (circleCenterX - circleRadius));
+              }
+              if (boundingRect.left + boundingRect.width < (circleCenterX + circleRadius)) {
+                obj.left += ((circleCenterX + circleRadius) - (boundingRect.left + boundingRect.width));
+              }
+            
+              // Ограничиваем по вертикали (Y)
+              if (boundingRect.top > (circleCenterY - circleRadius)) {
+                obj.top -= (boundingRect.top - (circleCenterY - circleRadius));
+              }
+              if (boundingRect.top + boundingRect.height < (circleCenterY + circleRadius)) {
+                obj.top += ((circleCenterY + circleRadius) - (boundingRect.top + boundingRect.height));
+              }
+            });
 
             // --- ШАГ 3: Обложка с дыркой (ПОВЕРХ ФОТО) ---
             const coverFabricImg = new fabric.Image(transparentCover, {
