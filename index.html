@@ -87,19 +87,19 @@
   <h1>make ur 2l17</h1>
 
   <div class="container">
-    <p>загрузи фото - оно подставится в обложку</p>
+    <p>upload a photo — it will appear on the cover</p>
     
     <label class="custom-file-upload" id="uploadLabel">
       <input type="file" id="imageLoader" accept="image/*" />
-      нажми, чтобы загрузить фото
+      click to upload the photo
     </label>
 
     <div id="preview-container">
       <canvas id="canvas"></canvas>
-      <p style="font-size: 12px; margin: 10px 0;">регулируй фото пальцем или мышкой</p>
+      <p style="font-size: 12px; margin: 10px 0;">adjust the photo with your finger or a computer mouse</p>
 
       <!-- НОВАЯ КНОПКА -->
-      <button id="downloadBtn">скачать картинку</button>
+      <button id="downloadBtn">download the picture</button>
     </div>
   </div>
 
@@ -236,7 +236,7 @@
             // Меняем текст на главной кнопке загрузки (с проверкой на существование)
             const uploadLabel = document.getElementById('uploadLabel');
             if (uploadLabel) {
-              uploadLabel.innerHTML = '<input type="file" id="imageLoader" accept="image/*" /> поставить другое фото';
+              uploadLabel.innerHTML = '<input type="file" id="imageLoader" accept="image/*" /> take a different photo';
               document.getElementById('imageLoader').addEventListener('change', handleImageUpload);
             }
 
@@ -261,7 +261,7 @@
       canvas.renderAll();
   
       // 1. Спрашиваем у пользователя название
-      let userName = prompt("Назови готовое фото:", "");
+      let userName = prompt("Name the finished picture:", "");
   
       // Если пользователь нажал "Отмена" или ввел пустоту, ставим название по умолчанию
       if (!userName || userName.trim() === "") {
